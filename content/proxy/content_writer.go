@@ -31,6 +31,7 @@ type remoteWriter struct {
 	ref    string
 	client contentapi.Content_WriteClient
 	offset int64
+	size   int64
 	digest digest.Digest
 }
 
@@ -94,6 +95,11 @@ func (rw *remoteWriter) Write(p []byte) (n int, err error) {
 	if resp.Digest != "" {
 		rw.digest = resp.Digest
 	}
+
+	if err == nil {
+		rw.size = rw.size + int64(len(p))
+	}
+
 	return
 }
 
@@ -103,6 +109,9 @@ func (rw *remoteWriter) Commit(ctx context.Context, size int64, expected digest.
 		if err := opt(&base); err != nil {
 			return err
 		}
+	}
+	if expected != "" {
+		size = rw.size
 	}
 	resp, err := rw.send(&contentapi.WriteContentRequest{
 		Action:   contentapi.WriteActionCommit,
@@ -131,6 +140,7 @@ func (rw *remoteWriter) Commit(ctx context.Context, size int64, expected digest.
 func (rw *remoteWriter) Truncate(size int64) error {
 	// This truncation won't actually be validated until a write is issued.
 	rw.offset = size
+	rw.size = size
 	return nil
 }
 
