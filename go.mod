@@ -28,7 +28,7 @@ require (
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/gogo/googleapis v1.4.0
 	github.com/gogo/protobuf v1.3.2
-	github.com/google/go-cmp v0.5.5
+	github.com/google/go-cmp v0.5.6
 	github.com/google/uuid v1.2.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/hashicorp/go-multierror v1.0.0
@@ -46,7 +46,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.7.1
 	github.com/sirupsen/logrus v1.8.1
-	github.com/stretchr/testify v1.6.1
+	github.com/stretchr/testify v1.7.0
 	github.com/tchap/go-patricia v2.2.6+incompatible
 	github.com/urfave/cli v1.22.2
 	go.etcd.io/bbolt v1.3.5
@@ -78,7 +78,7 @@ require (
 	github.com/go-logr/logr v0.2.0 // indirect
 	github.com/godbus/dbus/v5 v5.0.4 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
-	github.com/golang/protobuf v1.5.0 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/gofuzz v1.1.0 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
