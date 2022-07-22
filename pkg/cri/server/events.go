@@ -30,7 +30,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
-	"k8s.io/apimachinery/pkg/util/clock"
+	"k8s.io/utils/clock"
 
 	"github.com/containerd/containerd/pkg/cri/constants"
 	"github.com/containerd/containerd/pkg/cri/store"

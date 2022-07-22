@@ -23,7 +23,7 @@ import (
 	eventtypes "github.com/containerd/containerd/api/events"
 	"github.com/containerd/typeurl"
 	"github.com/stretchr/testify/assert"
-	"k8s.io/apimachinery/pkg/util/clock"
+	"k8s.io/utils/clock"
 )
 
 // TestBackOff tests the logic of backOff struct.
