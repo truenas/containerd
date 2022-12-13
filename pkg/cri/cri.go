@@ -79,7 +79,7 @@ func initCRIService(ic *plugin.InitContext) (interface{}, error) {
 	}
 	log.G(ctx).Infof("Start cri plugin with config %+v", c)
 
-	err = middleware.InitConfig()
+	err := middleware.InitConfig()
 	if err != nil {
 		logrus.Errorf("Failed to initialize middleware configuration %s", err)
 	}
