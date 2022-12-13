@@ -30,6 +30,7 @@ import (
 
 	"github.com/containerd/containerd/containers"
 	"github.com/containerd/containerd/log"
+	"github.com/containerd/containerd/middleware"
 	"github.com/containerd/containerd/mount"
 	"github.com/containerd/containerd/oci"
 	runtimespec "github.com/opencontainers/runtime-spec/specs-go"
@@ -101,6 +102,13 @@ func WithMounts(osi osinterface.OS, config *runtime.ContainerConfig, extra []*ru
 			criMounts = config.GetMounts()
 			mounts    = append([]*runtime.Mount{}, criMounts...)
 		)
+		for _, c := range criMounts {
+			err = middleware.ValidateSourcePath(filepath.Clean(c.HostPath))
+			if err != nil {
+				return err
+			}
+		}
+
 		// Copy all mounts from extra mounts, except for mounts overridden by CRI.
 		for _, e := range extra {
 			found := false
