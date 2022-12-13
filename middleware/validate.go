@@ -1,10 +1,12 @@
 package middleware
 
 import (
+	"fmt"
 	"path/filepath"
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 func lockedPathValidation(path string, pathType string) error {
@@ -131,4 +133,38 @@ func ixMountValidation(path string, pathType string) error {
 		return nil
 	}
 	return errors.Errorf("%s %s not allowed to be mounted", path, pathType)
+}
+
+func ValidateSourcePath(path string) error {
+	if path == "" || !CanVerifyVolumes() {
+		return nil
+	}
+	paths := map[string]string{
+		"path": path,
+	}
+	realPath, err := filepath.EvalSymlinks(path)
+	if err == nil && realPath != path {
+		paths[fmt.Sprintf("path (real path of  %s)", path)] = realPath
+	} else if err != nil {
+		logrus.Errorf("Unable to determine real path of %s for validation", path)
+	}
+	for pathType, pathToTest := range paths {
+		err := ixMountValidation(pathToTest, pathType)
+		if err != nil {
+			return err
+		}
+		if strings.HasPrefix(path, "/mnt/") && CanVerifyLockedVolumes() {
+			err := lockedPathValidation(pathToTest, pathType)
+			if err != nil {
+				return err
+			}
+		}
+		if strings.HasPrefix(path, "/mnt/") && CanVerifyAttachPath() {
+			err := attachedPathValidation(pathToTest, pathType)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
