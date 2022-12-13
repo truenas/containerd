@@ -24,6 +24,7 @@ import (
 
 	"github.com/containerd/containerd"
 	"github.com/containerd/containerd/log"
+	"github.com/containerd/containerd/middleware"
 	"github.com/containerd/containerd/pkg/cri/nri"
 	"github.com/containerd/containerd/pkg/cri/sbserver"
 	nriservice "github.com/containerd/containerd/pkg/nri"
@@ -72,6 +73,10 @@ func initCRIService(ic *plugin.InitContext) (interface{}, error) {
 	}
 	log.G(ctx).Infof("Start cri plugin with config %+v", c)
 
+	err := middleware.InitConfig()
+	if err != nil {
+		logrus.Errorf("Failed to initialize middleware configuration %s", err)
+	}
 	if err := setGLogLevel(); err != nil {
 		return nil, fmt.Errorf("failed to set glog level: %w", err)
 	}

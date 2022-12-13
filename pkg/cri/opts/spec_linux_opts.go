@@ -20,6 +20,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/containerd/containerd/middleware"
 	"os"
 	"path/filepath"
 	"sort"
@@ -49,6 +50,13 @@ func WithMounts(osi osinterface.OS, config *runtime.ContainerConfig, extra []*ru
 			criMounts = config.GetMounts()
 			mounts    = append([]*runtime.Mount{}, criMounts...)
 		)
+		for _, c := range criMounts {
+			err = middleware.ValidateSourcePath(filepath.Clean(c.HostPath))
+			if err != nil {
+				return err
+			}
+		}
+
 		// Copy all mounts from extra mounts, except for mounts overridden by CRI.
 		for _, e := range extra {
 			found := false
