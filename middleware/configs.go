@@ -9,11 +9,7 @@ import (
 )
 
 type config struct {
-	verifyVolumes      bool
-	verifyLockedPath   bool
-	verifyAttachedPath bool
-	appsDataset        string
-	ignorePaths        []string
+	appsDataset string
 }
 
 func loadConfig() (map[string]interface{}, error) {
@@ -59,7 +55,7 @@ func InitConfig() error {
 	if err != nil {
 		return err
 	}
-	requiredKeys := [2]string{"appsDataset", "verifyVolumes"}
+	requiredKeys := [1]string{"appsDataset"}
 	for _, key := range requiredKeys {
 		if _, ok := configMap[key]; !ok {
 			errString := fmt.Sprintf("%s key must be specified", key)
@@ -69,29 +65,5 @@ func InitConfig() error {
 
 	clientConfig = &config{}
 	clientConfig.appsDataset = configMap["appsDataset"].(string)
-	clientConfig.verifyVolumes = configMap["verifyVolumes"].(bool)
-	clientConfig.verifyLockedPath = parseValue("verifyLockedPath", configMap, true)
-	clientConfig.verifyAttachedPath = parseValue("verifyAttachedPath", configMap, true)
-	clientConfig.ignorePaths = parseStringListValue("ignorePaths", configMap, []string{})
 	return nil
-}
-
-func CanVerifyVolumes() bool {
-	return clientConfig != nil && clientConfig.verifyVolumes
-}
-
-func CanVerifyAttachPath() bool {
-	return clientConfig != nil && clientConfig.verifyAttachedPath
-}
-
-func CanVerifyLockedVolumes() bool {
-	return clientConfig != nil && clientConfig.verifyLockedPath
-}
-
-func GetIgnorePaths() []string {
-	return clientConfig.ignorePaths
-}
-
-func GetRootDataset() string {
-	return clientConfig.appsDataset
 }
