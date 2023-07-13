@@ -5,7 +5,7 @@ import (
 )
 
 func ValidateSourcePath(path string) error {
-	if path == "" || !CanVerifyVolumes() {
+	if path == "" {
 		return nil
 	}
 	validationErr, _ := Call("chart.release.validate_host_source_path", path)
