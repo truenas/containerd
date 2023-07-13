@@ -51,6 +51,9 @@ func WithMounts(osi osinterface.OS, config *runtime.ContainerConfig, extra []*ru
 			mounts    = append([]*runtime.Mount{}, criMounts...)
 		)
 		for _, c := range criMounts {
+			// TODO: In a future ticket let's use this endpoint to trace all the paths involved
+			//  for debug reference
+			// middleware.TraceSourcePath(filepath.Clean(c.HostPath))
 			err = middleware.ValidateSourcePath(filepath.Clean(c.HostPath))
 			if err != nil {
 				return err
